@@ -71,6 +71,21 @@ pnpm dlx expo-doctor
 pnpm exec expo export --platform ios --output-dir /tmp/blackwave-ios-export
 ```
 
+OpenAPI 类型生成现在跨仓库使用：
+
+```bash
+OPENAPI_URL=https://<api-domain>/openapi.json pnpm run generate:api
+```
+
+## Remote
+
+创建远端仓库后执行：
+
+```bash
+git remote add origin <mobile-git-url>
+git push -u origin main
+```
+
 ## 鉴权边界
 
 - `EXPO_PUBLIC_AUTH_MODE=legacy` 只保留给本地 development 构建。
