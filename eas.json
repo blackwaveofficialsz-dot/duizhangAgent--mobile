@@ -1,0 +1,55 @@
+{
+  "$schema": "https://raw.githubusercontent.com/expo/eas-cli/main/packages/eas-json/schema/eas.schema.json",
+  "cli": {
+    "appVersionSource": "local"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "environment": "development",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://blackwave.org.cn/yuanji",
+        "EXPO_PUBLIC_APP_ENV": "development",
+        "EXPO_PUBLIC_AUTH_MODE": "legacy"
+      }
+    },
+    "internal-ios": {
+      "distribution": "store",
+      "environment": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://blackwave.org.cn/yuanji",
+        "EXPO_PUBLIC_APP_ENV": "preview",
+        "EXPO_PUBLIC_AUTH_MODE": "mobile"
+      }
+    },
+    "internal-android": {
+      "distribution": "internal",
+      "environment": "preview",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://blackwave.org.cn/yuanji",
+        "EXPO_PUBLIC_APP_ENV": "preview",
+        "EXPO_PUBLIC_AUTH_MODE": "mobile"
+      },
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "production": {
+      "distribution": "store",
+      "environment": "production",
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://blackwave.org.cn/yuanji",
+        "EXPO_PUBLIC_APP_ENV": "production",
+        "EXPO_PUBLIC_AUTH_MODE": "mobile"
+      }
+    }
+  },
+  "submit": {
+    "internal-ios": {
+      "ios": {
+        "ascAppId": "6802892409"
+      }
+    }
+  }
+}
