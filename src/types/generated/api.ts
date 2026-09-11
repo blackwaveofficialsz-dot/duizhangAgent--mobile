@@ -145,23 +145,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/admin/users/{user_id}/password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Reset User Password */
-        patch: operations["reset_user_password_api_v1_admin_users__user_id__password_patch"];
-        trace?: never;
-    };
     "/api/v1/admin/users/{user_id}/role": {
         parameters: {
             query?: never;
@@ -3472,23 +3455,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/platform/users/{user_id}/password": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** Reset Platform User Password */
-        patch: operations["reset_platform_user_password_api_v1_platform_users__user_id__password_patch"];
-        trace?: never;
-    };
     "/api/v1/platform/users/{user_id}/role": {
         parameters: {
             query?: never;
@@ -6574,37 +6540,6 @@ export interface operations {
         };
     };
     delete_user_api_v1_admin_users__user_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                user_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    reset_user_password_api_v1_admin_users__user_id__password_patch: {
         parameters: {
             query?: never;
             header?: never;
@@ -13694,37 +13629,6 @@ export interface operations {
         };
     };
     delete_platform_user_api_v1_platform_users__user_id__delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                user_id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
-    };
-    reset_platform_user_password_api_v1_platform_users__user_id__password_patch: {
         parameters: {
             query?: never;
             header?: never;
