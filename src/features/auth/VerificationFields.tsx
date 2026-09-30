@@ -8,6 +8,9 @@ import type { VerificationChannel, VerificationPurpose } from './useVerification
 
 type VerificationFieldsProps = {
   channel: VerificationInputChannel;
+  confirmButtonLabel?: string;
+  confirmButtonVariant?: 'inline' | 'primary';
+  confirmLoading?: boolean;
   disabled?: boolean;
   inviteToken?: string;
   onBusyChange?: (busy: boolean) => void;
@@ -32,6 +35,9 @@ function isContactEligibilityError(error: unknown): error is ApiHttpError {
 
 export function VerificationFields({
   channel,
+  confirmButtonLabel = '验证验证码',
+  confirmButtonVariant = 'inline',
+  confirmLoading = false,
   disabled = false,
   inviteToken,
   onBusyChange,
@@ -149,22 +155,36 @@ export function VerificationFields({
             style={styles.input}
             value={flow.code}
           />
-          <Pressable
-            accessibilityLabel="验证验证码"
-            accessibilityRole="button"
-            accessibilityState={{ busy: flow.phase === 'confirming', disabled: confirmDisabled }}
-            disabled={confirmDisabled}
-            onPress={() => { void confirm(); }}
-            style={({ pressed }) => [styles.button, confirmDisabled && styles.disabled, pressed && !confirmDisabled && styles.pressed]}
-          >
-            {flow.phase === 'confirming' ? <ActivityIndicator color={theme.action.onPrimary} /> : <Text numberOfLines={1} style={styles.buttonText}>验证验证码</Text>}
-          </Pressable>
+          {confirmButtonVariant === 'inline' ? (
+            <Pressable
+              accessibilityLabel={confirmButtonLabel}
+              accessibilityRole="button"
+              accessibilityState={{ busy: flow.phase === 'confirming', disabled: confirmDisabled }}
+              disabled={confirmDisabled}
+              onPress={() => { void confirm(); }}
+              style={({ pressed }) => [styles.button, confirmDisabled && styles.disabled, pressed && !confirmDisabled && styles.pressed]}
+            >
+              {flow.phase === 'confirming' ? <ActivityIndicator color={theme.action.onPrimary} /> : <Text numberOfLines={1} style={styles.buttonText}>{confirmButtonLabel}</Text>}
+            </Pressable>
+          ) : null}
         </View>
         {codeError ? <Text accessibilityRole="alert" style={styles.error}>{codeError}</Text> : null}
         {flow.error && !isContactEligibilityError(flow.error)
           ? <Text accessibilityRole="alert" style={styles.error}>{flow.error.message}</Text>
           : null}
       </View>
+      {confirmButtonVariant === 'primary' ? (
+        <Pressable
+          accessibilityLabel={confirmButtonLabel}
+          accessibilityRole="button"
+          accessibilityState={{ busy: flow.phase === 'confirming' || confirmLoading, disabled: confirmDisabled }}
+          disabled={confirmDisabled}
+          onPress={() => { void confirm(); }}
+          style={({ pressed }) => [styles.primaryButton, confirmDisabled && styles.disabled, pressed && !confirmDisabled && styles.pressed]}
+        >
+          {flow.phase === 'confirming' || confirmLoading ? <ActivityIndicator color={theme.action.onPrimary} /> : <Text style={styles.primaryButtonText}>{confirmButtonLabel}</Text>}
+        </Pressable>
+      ) : null}
     </View>
   );
 }
@@ -233,6 +253,16 @@ function createStyles(theme: AppTheme) {
       paddingHorizontal: 10,
     },
     buttonText: { color: theme.action.onPrimary, fontSize: 13, fontWeight: '700' },
+    primaryButton: {
+      alignSelf: 'stretch',
+      height: 52,
+      borderRadius: 12,
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: theme.action.primary,
+      paddingHorizontal: 16,
+    },
+    primaryButtonText: { color: theme.action.onPrimary, fontSize: 16, fontWeight: '700' },
     disabled: { opacity: 0.45 },
     pressed: { transform: [{ scale: 0.98 }] },
     error: { color: theme.status.danger, fontSize: 16 },

@@ -147,6 +147,8 @@ export function LoginScreen() {
             editable={!interactionLocked}
             onChangeText={setIdentifier}
             placeholder="请输入用户名/手机号/邮箱"
+            returnKeyType="next"
+            textContentType="username"
             value={identifier}
           />
           <PasswordField
@@ -154,8 +156,11 @@ export function LoginScreen() {
             disabled={interactionLocked}
             label="密码"
             onChangeText={setPassword}
+            onSubmitEditing={() => { void submitPassword(); }}
             onToggle={() => setPasswordVisible((visible) => !visible)}
             placeholder="请输入密码"
+            returnKeyType="go"
+            textContentType="password"
             value={password}
             visible={passwordVisible}
           />
@@ -166,6 +171,9 @@ export function LoginScreen() {
         <>
           <VerificationFields
             channel="auto"
+            confirmButtonLabel="登录"
+            confirmButtonVariant="primary"
+            confirmLoading={submitting && Boolean(verificationToken)}
             disabled={interactionLocked}
             onError={handleVerificationError}
             onReset={() => setVerificationToken(null)}
@@ -174,7 +182,6 @@ export function LoginScreen() {
             purpose="login"
             target={target}
           />
-          {submitting && verificationToken ? <PrimaryButton disabled label="登录" loading onPress={() => {}} /> : null}
           {unregistered ? <LinkButton disabled={interactionLocked} label="使用邀请码注册" onPress={() => navigate('/(auth)/register')} /> : null}
         </>
       )}

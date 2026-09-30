@@ -1,4 +1,5 @@
 import { act, fireEvent, render, waitFor } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 import { ApiHttpError } from '@/services/api/client';
 import * as toast from '@/components/feedback/AppToast';
 import * as authApi from '@/services/api/auth';
@@ -48,7 +49,7 @@ describe('LoginScreen', () => {
     const submit = screen.getByRole('button', { name: '登录' });
 
     expect(screen.getByTestId('brand-mark')).toBeTruthy();
-    expect(screen.getByTestId('auth-primary-button')).toHaveStyle({ width: 180, height: 52 });
+    expect(screen.getByTestId('auth-primary-button')).toHaveStyle({ alignSelf: 'stretch', height: 52 });
     expect(screen.queryByText('账号类型')).toBeNull();
     expect(screen.queryByRole('button', { name: '选择用户名' })).toBeNull();
     expect(screen.getByPlaceholderText('请输入用户名/手机号/邮箱')).toBeTruthy();
@@ -56,6 +57,19 @@ describe('LoginScreen', () => {
     await fireEvent.changeText(screen.getByLabelText('账号'), 'demo');
     await fireEvent.changeText(screen.getByLabelText('密码'), 'secret');
     expect(screen.getByRole('button', { name: '登录' }).props.accessibilityState.disabled).toBe(false);
+  });
+
+  it('anchors the login form near the top when switching login modes', async () => {
+    const screen = await render(<LoginScreen />);
+    const initialStyle = StyleSheet.flatten(screen.getByTestId('auth-screen-scroll').props.contentContainerStyle);
+
+    expect(initialStyle).toMatchObject({ justifyContent: 'flex-start' });
+    expect(initialStyle.paddingTop).toBeGreaterThan(0);
+
+    await fireEvent.press(await screen.findByRole('button', { name: '验证码登录' }));
+    const codeStyle = StyleSheet.flatten(screen.getByTestId('auth-screen-scroll').props.contentContainerStyle);
+
+    expect(codeStyle).toMatchObject({ justifyContent: 'flex-start', paddingTop: initialStyle.paddingTop });
   });
 
   it.each([
@@ -72,6 +86,16 @@ describe('LoginScreen', () => {
     expect(mockReplace).toHaveBeenCalledWith('/(app)/(tabs)/analytics');
     expect(toast.showToast).toHaveBeenCalledWith('登录成功', 'success');
     expect(screen.queryByDisplayValue('secret-password')).toBeNull();
+  });
+
+  it('submits password login from the password return key', async () => {
+    const screen = await render(<LoginScreen />);
+    await fireEvent.changeText(screen.getByLabelText('账号'), 'demo');
+    await fireEvent.changeText(screen.getByLabelText('密码'), 'secret-password');
+    await fireEvent(screen.getByLabelText('密码'), 'submitEditing');
+
+    await waitFor(() => expect(authApi.loginWithPassword).toHaveBeenCalledWith('username', 'demo', 'secret-password'));
+    expect(mockReplace).toHaveBeenCalledWith('/(app)/(tabs)/analytics');
   });
 
   it('shows code login only after effective capability is ready', async () => {
@@ -107,6 +131,8 @@ describe('LoginScreen', () => {
   it('rejects an invalid code-login contact before sending a verification request', async () => {
     const screen = await render(<LoginScreen />);
     await fireEvent.press(await screen.findByRole('button', { name: '验证码登录' }));
+    expect(screen.queryByRole('button', { name: '验证验证码' })).toBeNull();
+    expect(screen.getByRole('button', { name: '登录' })).toHaveStyle({ alignSelf: 'stretch', height: 52 });
     await fireEvent.changeText(screen.getByLabelText('邮箱/手机号'), 'not-a-contact');
     await fireEvent.press(screen.getByRole('button', { name: '发送验证码' }));
 
@@ -187,6 +213,6 @@ async function completeVerification(screen: Awaited<ReturnType<typeof render>>) 
   await fireEvent.changeText(screen.getByLabelText('邮箱/手机号'), 'login@example.com');
   await fireEvent.press(screen.getByRole('button', { name: '发送验证码' }));
   await fireEvent.changeText(screen.getByLabelText('验证码'), '123456');
-  await waitFor(() => expect(screen.getByRole('button', { name: '验证验证码' }).props.accessibilityState.disabled).toBe(false));
-  await fireEvent.press(screen.getByRole('button', { name: '验证验证码' }));
+  await waitFor(() => expect(screen.getByRole('button', { name: '登录' }).props.accessibilityState.disabled).toBe(false));
+  await fireEvent.press(screen.getByRole('button', { name: '登录' }));
 }

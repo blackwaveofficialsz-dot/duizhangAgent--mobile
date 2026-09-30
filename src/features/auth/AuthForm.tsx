@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   type TextInputProps,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { Eye, EyeOff, X } from 'lucide-react-native';
@@ -21,13 +22,16 @@ import { describePasswordStrength, PASSWORD_LENGTH_HINT } from './passwordPolicy
 
 export function AuthScreen({ children, title }: PropsWithChildren<{ title: string }>) {
   const { theme } = useTheme();
+  const { height } = useWindowDimensions();
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const contentTop = Math.round(height * 0.15);
   return (
     <SafeAreaView style={styles.safeArea}>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.fill}>
         <ScrollView
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[styles.scrollContent, { paddingTop: contentTop }]}
           keyboardShouldPersistTaps="handled"
+          testID="auth-screen-scroll"
         >
           <View style={styles.brandBlock}>
             <BrandMark size={52} />
@@ -107,14 +111,17 @@ type PasswordFieldProps = {
   disabled?: boolean;
   label: string;
   onChangeText: (value: string) => void;
+  onSubmitEditing?: TextInputProps['onSubmitEditing'];
   onToggle: () => void;
   placeholder: string;
+  returnKeyType?: TextInputProps['returnKeyType'];
+  textContentType?: TextInputProps['textContentType'];
   toggleLabel?: string;
   value: string;
   visible: boolean;
 };
 
-export function PasswordField({ autoComplete = 'new-password', disabled = false, label, onChangeText, onToggle, placeholder, toggleLabel, value, visible }: PasswordFieldProps) {
+export function PasswordField({ autoComplete = 'new-password', disabled = false, label, onChangeText, onSubmitEditing, onToggle, placeholder, returnKeyType, textContentType, toggleLabel, value, visible }: PasswordFieldProps) {
   const { theme } = useTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const actionLabel = visible ? `隐藏${toggleLabel ?? label}` : `显示${toggleLabel ?? label}`;
@@ -129,10 +136,13 @@ export function PasswordField({ autoComplete = 'new-password', disabled = false,
           autoComplete={autoComplete}
           editable={!disabled}
           onChangeText={onChangeText}
+          onSubmitEditing={onSubmitEditing}
           placeholder={placeholder}
           placeholderTextColor={theme.text.muted}
+          returnKeyType={returnKeyType}
           secureTextEntry={!visible}
           style={styles.passwordInput}
+          textContentType={textContentType}
           value={value}
         />
         <Pressable
@@ -266,11 +276,11 @@ function createStyles(theme: AppTheme) {
   return StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: theme.background.canvas },
     fill: { flex: 1 },
-    scrollContent: { flexGrow: 1, width: '100%', maxWidth: 460, alignSelf: 'center', justifyContent: 'center', padding: 24, gap: 24 },
-    brandBlock: { alignItems: 'center', flexDirection: 'row', gap: 12 },
+    scrollContent: { flexGrow: 1, width: '100%', maxWidth: 460, alignSelf: 'center', justifyContent: 'flex-start', paddingBottom: 24, paddingHorizontal: 24, gap: 24 },
+    brandBlock: { alignItems: 'center',  flexDirection: 'row', gap: 12 },
     brandName: { color: theme.text.primary, fontSize: 24 },
     brandEnglish: { color: theme.chart.series01, fontSize: 12, fontWeight: '600' },
-    title: { color: theme.text.primary, fontSize: 24, fontWeight: '700' },
+    title: { color: theme.text.primary, fontSize: 24, fontWeight: '700'},
     form: { gap: 20 },
     field: { gap: 8 },
     label: { color: theme.text.primary, fontSize: 16, fontWeight: '600' },
@@ -282,16 +292,16 @@ function createStyles(theme: AppTheme) {
     strengthHint: { color: theme.text.muted, fontSize: 12, letterSpacing: 0 },
     strengthBars: { flexDirection: 'row', gap: 5 },
     strengthBar: { borderRadius: 999, flex: 1, height: 4 },
-    input: { height: 52, borderWidth: 1, borderColor: theme.border.default, borderRadius: 8, backgroundColor: theme.background.surface, color: theme.text.primary, fontSize: 16, paddingHorizontal: 16 },
-    passwordField: { height: 52, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: theme.border.default, borderRadius: 8, backgroundColor: theme.background.surface },
+    input: { height: 52, borderWidth: 1, borderColor: theme.border.default, borderRadius: 12, backgroundColor: theme.background.surface, color: theme.text.primary, fontSize: 16, paddingHorizontal: 16 },
+    passwordField: { height: 52, flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: theme.border.default, borderRadius: 12, backgroundColor: theme.background.surface },
     passwordInput: { flex: 1, height: '100%', color: theme.text.primary, fontSize: 16, paddingLeft: 16, paddingRight: 8 },
     iconButton: { width: 48, height: 48, alignItems: 'center', justifyContent: 'center' },
     choiceRow: { flexDirection: 'row', gap: 8 },
-    choice: { minWidth: 72, minHeight: 44, flex: 1, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.border.default, borderRadius: 8, backgroundColor: theme.background.surface },
+    choice: { minWidth: 72, minHeight: 44, flex: 1, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.border.default, borderRadius: 12, backgroundColor: theme.background.surface },
     choiceSelected: { backgroundColor: theme.action.primary, borderColor: theme.action.primary },
     choiceText: { color: theme.text.primary, fontSize: 16, fontWeight: '600' },
     choiceTextSelected: { color: theme.action.onPrimary },
-    primary: { alignSelf: 'center', height: 52, width: 180, borderRadius: 8, backgroundColor: theme.action.primary, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 },
+    primary: { alignSelf: 'stretch', height: 52, borderRadius: 12, backgroundColor: theme.action.primary, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 16 },
     primaryText: { color: theme.action.onPrimary, fontSize: 16, fontWeight: '700' },
     disabled: { opacity: 0.45 },
     pressed: { transform: [{ scale: 0.98 }] },

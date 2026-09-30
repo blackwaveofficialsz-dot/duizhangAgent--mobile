@@ -60,6 +60,32 @@ describe('VerificationFields', () => {
     await view.unmount();
   });
 
+  it('can move confirmation to a primary login button', async () => {
+    mockRequestVerification.mockResolvedValue({
+      challengeId: 'challenge-1', message: 'sent', expiresIn: 300, resendAfter: 0,
+    });
+    mockConfirmVerification.mockResolvedValue({ verificationToken: 'one-time-token', expiresIn: 600 });
+    const onVerified = jest.fn();
+    const view = await render(<VerificationFields
+      channel="email"
+      confirmButtonLabel="登录"
+      confirmButtonVariant="primary"
+      purpose="login"
+      target="a@example.com"
+      onTargetChange={jest.fn()}
+      onVerified={onVerified}
+    />);
+
+    expect(view.queryByRole('button', { name: '验证验证码' })).toBeNull();
+    expect(view.getByRole('button', { name: '登录' })).toHaveStyle({ alignSelf: 'stretch', height: 52 });
+    await act(async () => { fireEvent.press(view.getByRole('button', { name: '发送验证码' })); });
+    await fireEvent.changeText(view.getByLabelText('验证码'), '123456');
+    await act(async () => { fireEvent.press(view.getByRole('button', { name: '登录' })); });
+
+    expect(onVerified).toHaveBeenCalledWith('one-time-token');
+    await view.unmount();
+  });
+
   it('passes structured contact delivery errors to the parent without replacing them with delivery copy', async () => {
     const error = Object.assign(new Error('not registered'), { code: 'contact_not_registered' });
     mockRequestVerification.mockRejectedValue(error);
