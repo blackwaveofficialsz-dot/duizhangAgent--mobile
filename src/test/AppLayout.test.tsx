@@ -59,7 +59,7 @@ jest.mock('@/features/auth/authStore', () => ({
 jest.mock('@/theme/ThemeProvider', () => ({
   useTheme: () => ({
     theme: {
-      action: { primary: '#087E6D' },
+      action: { primary: '#1863DC' },
       background: { canvas: '#ffffff', surface: '#ffffff' },
       border: { default: '#d0d7de' },
       overlay: { scrim: 'rgba(0,0,0,0.4)' },
@@ -109,7 +109,7 @@ describe('AppLayout navigation', () => {
       disableTransparentOnScrollEdge: false,
       hidden: false,
       minimizeBehavior: 'automatic',
-      tintColor: '#087E6D',
+      tintColor: '#1863DC',
     }));
     expect(mockNativeTabTrigger.mock.calls.map(([props]) => (props as { name: string }).name)).toEqual([
       'analytics',

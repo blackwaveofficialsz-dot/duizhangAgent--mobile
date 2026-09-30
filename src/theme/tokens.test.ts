@@ -6,7 +6,7 @@ describe('semanticThemes', () => {
     expect(semanticThemes.light.background.surface).toBe('#FFFFFF');
     expect(semanticThemes.light.background.subtle).toBe('#EDF1F2');
     expect(semanticThemes.light.text.muted).toBe('#5F6B76');
-    expect(semanticThemes.light.action.primary).toBe('#087E6D');
+    expect(semanticThemes.light.action.primary).toBe('#1863DC');
     expect(semanticThemes.light.status.success).toBe('#087E6D');
     expect(semanticThemes.light.status.danger).toBe('#D9492B');
     expect(semanticThemes.light.status.warning).toBe('#A76500');

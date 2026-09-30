@@ -64,7 +64,7 @@ describe('themeStore', () => {
       background: { canvas: '#F5F7F8', surface: '#FFFFFF', subtle: '#EDF1F2' },
       text: { primary: '#17212B', secondary: '#53616D', muted: '#5F6B76' },
       border: { default: '#DDE5EA', strong: '#A8B2BC' },
-      action: { primary: '#087E6D', primaryPressed: '#056B5D', onPrimary: '#FFFFFF' },
+      action: { primary: '#1863DC', primaryPressed: '#1454C4', onPrimary: '#FFFFFF' },
       status: { danger: '#D9492B', success: '#087E6D', warning: '#A76500' },
     });
     expect(semanticThemes.dark).toMatchObject({

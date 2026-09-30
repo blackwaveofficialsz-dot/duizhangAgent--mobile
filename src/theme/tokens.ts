@@ -71,8 +71,8 @@ export const semanticThemes = {
       strong: '#A8B2BC',
     },
     action: {
-      primary: palette.primary,
-      primaryPressed: '#056B5D',
+      primary: '#1863DC',
+      primaryPressed: '#1454C4',
       onPrimary: palette.white,
     },
     status: {

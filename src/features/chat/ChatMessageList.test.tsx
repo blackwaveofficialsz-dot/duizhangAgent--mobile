@@ -366,7 +366,7 @@ describe('ChatMessageList', () => {
     expect(screen.getByText('查询订单')).toBeTruthy();
     expect(screen.getByText('按日期汇总订单')).toBeTruthy();
     expect(screen.getByLabelText('工具调用：查询订单，运行中')).toHaveStyle({
-      borderLeftColor: '#19A58E',
+      borderLeftColor: '#1863DC',
       borderLeftWidth: 3,
     });
     expect(screen.queryByText(/secret_token/)).toBeNull();

@@ -2,7 +2,7 @@ import { CheckCircle2, CircleDashed, XCircle } from 'lucide-react-native';
 import { useMemo } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useTheme } from '@/theme/ThemeProvider';
-import { palette, type AppTheme } from '@/theme/tokens';
+import type { AppTheme } from '@/theme/tokens';
 import type { ToolCallData } from '@/types/chat';
 
 type ToolCallBlockProps = {
@@ -47,7 +47,7 @@ function createStyles(theme: AppTheme) {
       alignItems: 'center',
       backgroundColor: theme.background.subtle,
       borderRadius: 8,
-      borderLeftColor: palette.tide,
+      borderLeftColor: theme.action.primary,
       borderLeftWidth: 3,
       flexDirection: 'row',
       gap: 10,
