@@ -5,7 +5,7 @@ import { Animated, Easing, StyleSheet, View } from 'react-native';
 const blackWaveLogo = require('../../../assets/images/BWlogo.jpg');
 const LOGO_ASPECT_RATIO = 1320 / 1307;
 const LOGO_WIDTH_RATIO = 0.8;
-const LOGO_CENTER_Y_RATIO = 0.35;
+const LOGO_CENTER_Y_RATIO = 0.5;
 
 type StartupScreenProps = {
   onReady?: () => void;

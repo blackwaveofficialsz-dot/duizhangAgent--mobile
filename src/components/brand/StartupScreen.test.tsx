@@ -39,14 +39,14 @@ describe('StartupScreen', () => {
     expect(screen.queryByRole('progressbar')).toBeNull();
   });
 
-  it('positions the logo center at the same vertical point as the native splash', async () => {
+  it('positions the logo center vertically on the startup screen', async () => {
     const screen = await render(<StartupScreen />);
     const logo = screen.getByLabelText('BlackWave 启动标识');
     const logoStyle = StyleSheet.flatten(logo.props.style);
     const content = screen.getByTestId('startup-content');
     const contentStyle = StyleSheet.flatten(content.props.style);
 
-    expect(contentStyle.top).toBeCloseTo((844 * 0.35) - (logoStyle.height / 2), 1);
+    expect(contentStyle.top).toBeCloseTo((844 * 0.5) - (logoStyle.height / 2), 1);
     expect(contentStyle.transform).toBeUndefined();
   });
 
